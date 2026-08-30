@@ -1,0 +1,25 @@
+---
+title: "Wine Quality Analysis"
+subtitle: "data607- week 1 assingment"
+date: "9/1/2026"
+author: "DW"
+format:
+  html:
+    toc: true
+    codefold: true
+  
+editor: visual
+---
+
+# Wine Quality Analysis
+
+## Approach
+
+In this assignment I selected a datasat from uc irvine that contains information about different chemical attributes in wine. the data set contains 11 features and is a good way to try to handle numerical data for feature selection and classification or regression analysis.
+
+My plan for this assignment is to load the data into R, and then do some slice some of the information into a smaller dataset of about 25%.
+
+I can also do some simple EDA on the datasets
+
+Data source: \
+<https://raw.githubusercontent.com/DW8888/Wine-Quality/refs/heads/main/winequality-white.csv> <https://raw.githubusercontent.com/DW8888/Wine-Quality/refs/heads/main/winequality-red.csv>
