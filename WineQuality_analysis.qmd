@@ -1,6 +1,6 @@
 ---
 title: "Wine Quality Analysis"
-subtitle: "data607- week 1 assingment"
+subtitle: "DATA 607: Week 1 Assignment Examplar"
 date: "9/1/2026"
 author: "DW"
 format:
@@ -15,19 +15,24 @@ editor: visual
 
 ## Approach
 
-In this assignment I selected a datasat from uc irvine that contains information about different chemical attributes in wine. the data set contains 11 features and is a good way to try to handle numerical data for feature selection and classification or regression analysis.
+In this assignment, I selected a dataset from the UCI Machine Learning Repository that contains information about the chemical attributes of wine. The dataset contains 11 features and provides a useful opportunity to practice working with numerical data, feature selection, and classification or regression analysis.
 
-My plan for this assignment is to load the data into R, and then do some slice some of the information into a smaller dataset of about 25%.
+My plan for this assignment is to load the data into R and create a label for the different wine types to use in a later classification task.
 
-I can also do some simple EDA on the datasets
+I will also perform some simple exploratory data analysis (EDA) on the datasets.
 
 Data source:\
 <https://raw.githubusercontent.com/DW8888/Wine-Quality/refs/heads/main/winequality-white.csv> <https://raw.githubusercontent.com/DW8888/Wine-Quality/refs/heads/main/winequality-red.csv>\
 \
+Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009). Wine Quality \[Dataset\]. UCI Machine Learning Repository. <https://doi.org/10.24432/C56S3T.>
+
+## Research Question
+
+Can the chemical attributes of a wine be used to classify it as red or white?
 
 ## Codebase
 
-First we need to import our library and data sets:
+First, we need to import the library and datasets:
 
 ```{r import-lib}
 # Getting the tidyverse package
@@ -35,13 +40,13 @@ library("tidyverse")
 ```
 
 ```{r import-data}
-# importing our data: my data set is seperated by the ; delimineter so i make sure to let the read dunction know to expect that.
+# Importing the data: the dataset uses semicolons as delimiters, so I specify that in the read function.
 
 red_wines<- read.csv("winequality-red.csv", sep=";")
 white_wines<- read.csv("winequality-white.csv" , sep=";")
 ```
 
-Lets see what our files gave us.\
+Let's inspect the structure of the datasets.\
 
 ```{r data-sum}
 str(red_wines)
@@ -51,12 +56,12 @@ str(red_wines)
 str(white_wines)
 ```
 
-## Minipulation 
+## Manipulation
 
-I want to set a label so i can then use this data set to predict wine color.
+I want to create a label that I can use to predict wine color.
 
 ```{r data-mut}
-# will make a factor colmn and attach the value 1 to red then combine the sets
+# Create a factor column, assign 1 to red wine, and then combine the datasets.
 red_wines$is_red <- factor(1, levels = c(0, 1), labels = c("white", "red"))
 
 white_wines$is_red <- factor(0, levels = c(0, 1), labels = c("white", "red"))
@@ -65,7 +70,7 @@ wines <- rbind(red_wines, white_wines)
 print(head(wines))
 ```
 
-Summary of our data
+Here is a summary of the data:
 
 ```{r eda}
 summary(wines)
@@ -81,7 +86,7 @@ summary(wines)
 numeric_vars <- names(wines)[sapply(wines, is.numeric)]
 
 par(mfrow = c(5, 3), mar = c(3, 3, 2,1))
-# itterate through the list and plot the variables
+# Iterate through the list and plot the variables.
 
 for (variable in numeric_vars) {
   hist(
@@ -106,3 +111,36 @@ barplot(
   ylab = "Count",
   col = c("lightyellow", "maroon"))
 ```
+
+## Tidyverse Comparison
+
+The following summary compares the number of wines, average alcohol content, and average quality for each wine type.
+
+```{r wine-type-summary}
+wines |>
+  group_by(is_red) |>
+  summarise(
+    number_of_wines = n(),
+    average_alcohol = round(mean(alcohol), 2),
+    average_quality = round(mean(quality), 2)
+  )
+```
+
+```{r alcohol-by-wine-type}
+ggplot(wines, aes(x = is_red, y = alcohol, fill = is_red)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c('white' = 'lightyellow', 'red' = 'maroon')) +
+  labs(
+    title = "Alcohol Content by Wine Type",
+    x = "Wine type",
+    y = "Alcohol content"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Thoughts
+
+\
+The dataset has no missing values and contains 11 numerical variables for each wine. I added a new variable to indicate whether the wine is red or white. Later, I plan to build a classification model that predicts whether a wine is red or white based on its features. It is important to note that the dataset has a class imbalance between red and white wines, which I will need to account for.\
+Many of the variables do not follow a normal distribution and would have to be normalized if we would like to do some sort of linear regression modeling.
