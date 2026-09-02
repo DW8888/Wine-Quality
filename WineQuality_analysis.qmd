@@ -5,8 +5,9 @@ date: "9/1/2026"
 author: "DW"
 format:
   html:
+    code-fold: true
     toc: true
-    codefold: true
+
   
 editor: visual
 ---
@@ -28,119 +29,6 @@ Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009). Wine Qualit
 
 ## Research Question
 
-Can the chemical attributes of a wine be used to classify it as red or white?
-
-## Codebase
-
-First, we need to import the library and datasets:
-
-```{r import-lib}
-# Getting the tidyverse package
-library("tidyverse")
-```
-
-```{r import-data}
-# Importing the data: the dataset uses semicolons as delimiters, so I specify that in the read function.
-
-red_wines<- read.csv("winequality-red.csv", sep=";")
-white_wines<- read.csv("winequality-white.csv" , sep=";")
-```
-
-Let's inspect the structure of the datasets.\
-
-```{r data-sum}
-str(red_wines)
-```
-
-```{r data-sum2}
-str(white_wines)
-```
-
-## Manipulation
-
-I want to create a label that I can use to predict wine color.
-
-```{r data-mut}
-# Create a factor column, assign 1 to red wine, and then combine the datasets.
-red_wines$is_red <- factor(1, levels = c(0, 1), labels = c("white", "red"))
-
-white_wines$is_red <- factor(0, levels = c(0, 1), labels = c("white", "red"))
-
-wines <- rbind(red_wines, white_wines)
-print(head(wines))
-```
-
-Here is a summary of the data:
-
-```{r eda}
-summary(wines)
-```
-
-```{r}
-#| label: variable-distributions
-#| fig-width: 12
-#| fig-height: 16
-
-
-
-numeric_vars <- names(wines)[sapply(wines, is.numeric)]
-
-par(mfrow = c(5, 3), mar = c(3, 3, 2,1))
-# Iterate through the list and plot the variables.
-
-for (variable in numeric_vars) {
-  hist(
-    wines[[variable]],
-    main = variable,
-    xlab = "",
-    col = "skyblue",
-    border = "white"
-  )
-}
-
-
-
-
-```
-
-```{r}
-barplot(
-  table(wines$is_red),
-  main = "Wine type",
-  xlab = "is_red",
-  ylab = "Count",
-  col = c("lightyellow", "maroon"))
-```
-
-## Tidyverse Comparison
-
-The following summary compares the number of wines, average alcohol content, and average quality for each wine type.
-
-```{r wine-type-summary}
-wines |>
-  group_by(is_red) |>
-  summarise(
-    number_of_wines = n(),
-    average_alcohol = round(mean(alcohol), 2),
-    average_quality = round(mean(quality), 2)
-  )
-```
-
-```{r alcohol-by-wine-type}
-ggplot(wines, aes(x = is_red, y = alcohol, fill = is_red)) +
-  geom_boxplot() +
-  scale_fill_manual(values = c('white' = 'lightyellow', 'red' = 'maroon')) +
-  labs(
-    title = "Alcohol Content by Wine Type",
-    x = "Wine type",
-    y = "Alcohol content"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "none")
-```
-
-## Thoughts
-
+Can the chemical attributes of a wine be used to classify it as red or white?\
 \
-The dataset has no missing values and contains 11 numerical variables for each wine. I added a new variable to indicate whether the wine is red or white. Later, I plan to build a classification model that predicts whether a wine is red or white based on its features. It is important to note that the dataset has a class imbalance between red and white wines, which I will need to account for.\
-Many of the variables do not follow a normal distribution and would have to be normalized if we would like to do some sort of linear regression modeling.
+This is for the explainer video.
