@@ -31,4 +31,3 @@ Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009). Wine Qualit
 
 Can the chemical attributes of a wine be used to classify it as red or white?\
 \
-This is for the explainer video.
